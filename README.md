@@ -25,12 +25,14 @@ use admindb.createUser(
   })
   
 4. Configure MongoDB to be able to connect by host machine (https://superuser.com/questions/1043721/unable-to-connect-to-mongodb-running-in-virtualbox-host-mac-os-guest-centos)
+
   /etc/mongod.conf
-  # Listen to local and LAN interface.
+  
+  Listen to local and LAN interface.
   bind_ip = 127.0.0.1,10.0.2.15
 
 5. Start MongoDB
-  sudo mongod --auth --dbpath /data/db1 --bind_ip 127.0.0.1,10.0.2.15
+sudo mongod --auth --dbpath /data/db1 --bind_ip 127.0.0.1,10.0.2.15
 
 6. node index.js
 
