@@ -1,7 +1,6 @@
 const status = require('http-status');
 const secondMicroservice = require('../db/service/second-microservice');
 
-
 module.exports = (app, db) => {
 
     /*
@@ -53,10 +52,10 @@ module.exports = (app, db) => {
         console.log('POST Request Body:', req.body);
         secondMicroservice.addOne(db, req.body).then(insertedCount => {
             console.log('Inserted Record(s): ',insertedCount);
-            res.status(status.OK).json({"Inserted Record(s): " : insertedCount })
+            res.status(status.OK).json({"Inserted Record(s)" : insertedCount })
           }).catch( error => {
             console.log('Failed to insert record! Error: ', error);
-            res.status(status.BAD_REQUEST).json({"Error Message: " : 'Failed to insert record! Error: ',error})
+            res.status(status.BAD_REQUEST).json({"Error Message" : 'Failed to insert record! Error: ',error})
           })
     })
 
@@ -75,32 +74,29 @@ module.exports = (app, db) => {
         console.log('PUT Request Body:', req.body);
         secondMicroservice.updateOne(db, req.body).then(modifiedCount => {
             console.log("Modified Record(s): ", modifiedCount);
-            res.status(status.OK).json({"Modified Record(s): " : modifiedCount})
+            res.status(status.OK).json({"Modified Record(s)" : modifiedCount})
         }).catch( error => {
             console.log('Failed to update record! Error: ', error);
-            res.status(status.BAD_REQUEST).json({"Error Message: " : 'Failed to update record! Error: ',error})
+            res.status(status.BAD_REQUEST).json({"Error Message" : 'Failed to update record! Error: ',error})
           })   
       });
 
     /*
-    *   URL: /secondMicroservice
+    *   URL: /secondMicroservice/:id
     *   Method: DELETE
-    *   Request Body Example: {"id":"5a7827f6bfe8e72a1849d26f"}
-    *   Response Example: 
-    *        {
-    *            "Deleted Record(s): ": 1
-    *        }
     */
     console.log('Registering api DELETE /secondMicroservice...');
-    app.delete('/secondMicroservice', function (req, res) {
+    app.delete('/secondMicroservice/:id', function (req, res) {
         console.log("Got a DELETE request for /secondMicroservice");
-        console.log('DELETE Request Body:', req.body);
-        secondMicroservice.deleteOne(db, req.body).then(deletedCount => {
+        //console.log('DELETE Request Body:', req.body);
+        console.log('DELETE Request Params:', req.params);
+        console.log('DELETE Request ID:', req.params.id);
+        secondMicroservice.deleteOne(db, req.params.id).then(deletedCount => {
             console.log("Deleted Record(s): ", deletedCount);
-            res.status(status.OK).json({"Deleted Record(s): " : deletedCount})
+            res.status(status.OK).json({"Deleted Record(s)" : deletedCount})
         }).catch( error => {
             console.log('Failed to delete record! Error: ', error);
-            res.status(status.BAD_REQUEST).json({"Error Message: " : 'Failed to delete record! Error: ',error})
+            res.status(status.BAD_REQUEST).json({"Error Message" : 'Failed to delete record! Error: ',error})
           })   
       });
 }

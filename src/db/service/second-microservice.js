@@ -65,11 +65,8 @@
         });
     }
 
-    const deleteOne = (db, reqBody) => {
+    const deleteOne = (db, id) => {
         return new Promise((resolve, error) => {
-
-            //Read Request
-            var id = reqBody.id;
            
             //Create Query
             var ObjectID = require('mongodb').ObjectID;
