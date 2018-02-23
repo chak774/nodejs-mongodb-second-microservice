@@ -77,13 +77,8 @@
 
 ----------------------------------------------
 
-- URL: /secondMicroservice
+- URL: /secondMicroservice/:id
 - Method: DELETE
-- Request Body Example: {"id":"5a7827f6bfe8e72a1849d26f"}
-- Response Example: 
-       {
-           "Deleted Record(s): ": 1
-       }
 
     
    
