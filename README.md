@@ -38,6 +38,9 @@
 
 ### How to run?    
 
+You can use my Angular 5 project as Front End: https://github.com/chak774/second-microservice-client
+Or just use POSTMAN as Web Service Call client: https://www.getpostman.com/
+
 - URL: /firstMicroservice
 - Method: GET
 - Response Example: 
