@@ -1,6 +1,6 @@
 const server = require('./server/server');
 const dbConnector = require('./db/connector/mongo');
-const {EventEmitter} = require('events');
+const EventEmitter = require('events');
 const mediator = new EventEmitter();
 
 mediator.on('db.ready', (db) => {
