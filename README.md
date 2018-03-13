@@ -83,5 +83,6 @@ Or just use POSTMAN as Web Service Call client: https://www.getpostman.com/
 - URL: /secondMicroservice/:id
 - Method: DELETE
 
-    
-   
+### How to run in Docker?   
+- Build Image: $ docker build -t <your username>/nodejs-mongodb-second-microservice:v1.0.0 .
+- Create & Run Container: $ docker run --network host -d <your username>/nodejs-mongodb-second-microservice:v1.0.0
