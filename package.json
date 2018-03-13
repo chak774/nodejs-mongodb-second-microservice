@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/index.js",
+    "start -dev": "nodemon ./src/index.js"
   },
   "author": "chester",
   "license": "ISC",
@@ -13,6 +15,7 @@
     "express": "^4.16.2",
     "http-status": "^1.0.1",
     "mongodb": "^3.0.2",
+    "nodemon": "^1.17.1",
     "util": "^0.10.3"
   }
 }

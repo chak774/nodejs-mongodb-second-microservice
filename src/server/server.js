@@ -1,4 +1,4 @@
-
+const config = require('../config/config');
 const express = require('express')
 const bodyParser = require('body-parser');
 const api = require('../api/api')
@@ -31,10 +31,10 @@ const start = (db) => {
             res.status(500).send('Something went wrong!')
         })  */
         api(app, db);
-        const server = app.listen(8081, () => resolve(resolve));
+        const server = app.listen(config.serverSettings.port, () => resolve(resolve));
     })
     .then(
-        result => console.log('Server started successfully. Listening on port: 8081'),
+        result => console.log('Server started successfully. Listening on port: ' + config.serverSettings.port),
         error => console.log('Failed to start server.',error)
 
     )
