@@ -3,6 +3,8 @@
 - Express ^4.16.2
 - Ubuntu 16.04
 - Mongo DB 3.6.2
+- nodemon ^1.17.1 (For Development Hot Reload Feature)
+- dotenv ^5.0.1 (For Loading External Configuration File)
 
 ### Environment Setup
 1. Prepare Ubuntu VM
