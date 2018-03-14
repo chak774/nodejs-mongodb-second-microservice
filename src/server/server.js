@@ -1,4 +1,3 @@
-const config = require('../config/config');
 const express = require('express')
 const bodyParser = require('body-parser');
 const api = require('../api/api')
@@ -19,9 +18,9 @@ const start = (db) => {
         //CORS Handler
         console.log('Registering general api to handle CORS...');
         app.use(function(req, res, next) {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            res.header("Access-Control-Allow-Origin", process.env.ORIGIN);
+            res.header("Access-Control-Allow-Headers", process.env.HEADERS);
+            res.header("Access-Control-Allow-Methods", process.env.METHODS);
             next();
           });
 
@@ -31,10 +30,10 @@ const start = (db) => {
             res.status(500).send('Something went wrong!')
         })  */
         api(app, db);
-        const server = app.listen(config.serverSettings.port, () => resolve(resolve));
+        const server = app.listen(process.env.SERVER_PORT, () => resolve(resolve));
     })
     .then(
-        result => console.log('Server started successfully. Listening on port: ' + config.serverSettings.port),
+        result => console.log('Server started successfully. Listening on port: ' + process.env.SERVER_PORT),
         error => console.log('Failed to start server.',error)
 
     )
