@@ -5,6 +5,7 @@
 - Mongo DB 3.6.2
 - nodemon ^1.17.1 (For Development Hot Reload Feature)
 - dotenv ^5.0.1 (For Loading External Configuration File)
+- winston ^3.0.0-rc2 (For Logging)
 
 ### Environment Setup
 1. Prepare Ubuntu VM
