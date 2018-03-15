@@ -1,3 +1,4 @@
+const logger = require('../../logger/logger').get();
 const MongoClient = require('mongodb').MongoClient;
 const f = require('util').format;
 
@@ -10,7 +11,7 @@ const getMongoURL = () => {
   , process.env.DB_PORT
   , process.env.DB_NAME
   , process.env.DB_AUTH_MECHANISM);
-  console.log('DB URL: ', url);
+  logger.log('debug', 'DB URL: '+ url);
   return url;
 }
 
@@ -23,13 +24,15 @@ const connect = (mediator) => {
             //Get the DB Object
             var db = mongoClient.db(process.env.DB_NAME);
             if (err) {
+              logger.error("Failed to connect to DB.");
               mediator.emit('db.error', err)
             }else{ 
+              logger.log('info', 'Connected to DB Successfully.')
               mediator.emit('db.ready', db);
-              
             }
           }else{
-            console.error("Failed to start server. Reason: Failed to connect to DB.");
+            logger.error("Failed to connect to DB.");
+            mediator.emit('db.error', err)
           }
         })
     })

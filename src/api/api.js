@@ -1,3 +1,4 @@
+const logger = require('../logger/logger').get();
 const status = require('http-status');
 const secondMicroservice = require('../db/service/second-microservice');
 
@@ -9,9 +10,9 @@ module.exports = (app, db) => {
     *   Response Example: 
     *       GET firstMicroservice Successfully.
     */
-    console.log('Registering api GET /firstMicroservice...');
+    logger.log('info', 'Registering api GET /firstMicroservice...');
     app.get('/firstMicroservice', (req, res) => {
-        console.log("Got a GET request for /firstMicroservice");
+        logger.log('info', "Got a GET request for /firstMicroservice");
         res.send('GET firstMicroservice Successfully.');
     })
 
@@ -30,11 +31,11 @@ module.exports = (app, db) => {
     *        }
     *    ]
     */
-    console.log('Registering api GET /secondMicroservices...');
+    logger.log('info', 'Registering api GET /secondMicroservices...');
     app.get('/secondMicroservices', (req, res) => {
-        console.log("Got a GET request for /secondMicroservices");
+        logger.log('info', "Got a GET request for /secondMicroservices");
         secondMicroservice.getAll(db).then(results => {
-            console.log('Response: ',results);
+            logger.log('debug', 'Response: '+ JSON.stringify(results));
             res.status(status.OK).json(results)
           }).catch()
     })
@@ -45,16 +46,16 @@ module.exports = (app, db) => {
     *   Request Body Example: {"foo":"bar"}
     *   Response Example: {"Inserted Record(s)" : 1}
     */
-    console.log('Registering api POST /secondMicroservice...');
+    logger.log('info', 'Registering api POST /secondMicroservice...');
     app.post('/secondMicroservice', (req, res) => {
-        console.log("Got a POST request for /secondMicroservice");
+        logger.log('info', "Got a POST request for /secondMicroservice");
         //The 'body-parser' middleware only handles JSON and urlencoded data
-        console.log('POST Request Body:', req.body);
+        logger.log('info', 'POST Request Body:'+ JSON.stringify(req.body));
         secondMicroservice.addOne(db, req.body).then(insertedCount => {
-            console.log('Inserted Record(s): ',insertedCount);
+            logger.log('info', 'Inserted Record(s): '+insertedCount);
             res.status(status.OK).json({"Inserted Record(s)" : insertedCount })
           }).catch( error => {
-            console.log('Failed to insert record! Error: ', error);
+            logger.log('info', 'Failed to insert record! Error: '+ error);
             res.status(status.BAD_REQUEST).json({"Error Message" : 'Failed to insert record! Error: ',error})
           })
     })
@@ -68,15 +69,15 @@ module.exports = (app, db) => {
     *            "Modified Record(s): ": 1
     *        }
     */
-    console.log('Registering api PUT /secondMicroservice...');
+    logger.log('info', 'Registering api PUT /secondMicroservice...');
     app.put('/secondMicroservice', function (req, res) {
-        console.log("Got a PUT request for /secondMicroservice");
-        console.log('PUT Request Body:', req.body);
+        logger.log('info', "Got a PUT request for /secondMicroservice");
+        logger.log('info', 'PUT Request Body:'+ JSON.stringify(req.body));
         secondMicroservice.updateOne(db, req.body).then(modifiedCount => {
-            console.log("Modified Record(s): ", modifiedCount);
+            logger.log('info', "Modified Record(s): "+ modifiedCount);
             res.status(status.OK).json({"Modified Record(s)" : modifiedCount})
         }).catch( error => {
-            console.log('Failed to update record! Error: ', error);
+            logger.log('info', 'Failed to update record! Error: '+ error);
             res.status(status.BAD_REQUEST).json({"Error Message" : 'Failed to update record! Error: ',error})
           })   
       });
@@ -85,17 +86,17 @@ module.exports = (app, db) => {
     *   URL: /secondMicroservice/:id
     *   Method: DELETE
     */
-    console.log('Registering api DELETE /secondMicroservice...');
+    logger.log('info', 'Registering api DELETE /secondMicroservice...');
     app.delete('/secondMicroservice/:id', function (req, res) {
-        console.log("Got a DELETE request for /secondMicroservice");
-        //console.log('DELETE Request Body:', req.body);
-        console.log('DELETE Request Params:', req.params);
-        console.log('DELETE Request ID:', req.params.id);
+        logger.log('info', "Got a DELETE request for /secondMicroservice");
+        //logger.log('DELETE Request Body:', req.body);
+        logger.log('info', 'DELETE Request Params:'+ req.params);
+        logger.log('info', 'DELETE Request ID:'+ req.params.id);
         secondMicroservice.deleteOne(db, req.params.id).then(deletedCount => {
-            console.log("Deleted Record(s): ", deletedCount);
+            logger.log('info', "Deleted Record(s): "+ deletedCount);
             res.status(status.OK).json({"Deleted Record(s)" : deletedCount})
         }).catch( error => {
-            console.log('Failed to delete record! Error: ', error);
+            logger.log('info', 'Failed to delete record! Error: '+ error);
             res.status(status.BAD_REQUEST).json({"Error Message" : 'Failed to delete record! Error: ',error})
           })   
       });
