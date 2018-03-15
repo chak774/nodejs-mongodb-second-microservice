@@ -1,8 +1,53 @@
 const winston = require('winston'); 
 const fs = require( 'fs' );
 const path = require('path');
+const dailyRotateFile = require('winston-daily-rotate-file');
 
 let logger;
+
+const getNowString = () => {
+    var today = new Date();
+    var date = today.getDate();
+    var month = today.getMonth()+1; //January is 0!
+    var year = today.getFullYear();
+    var hour = today.getHours();
+    var minute = today.getMinutes();
+    var second = today.getSeconds();
+    var millisecond = today.getMilliseconds();
+
+    if(date<10){
+        date='0'+date;
+    } 
+    if(month<10){
+        month='0'+month;
+    } 
+    if(hour<10){
+        hour='0'+hour;
+    } 
+    if(minute<10){
+        minute='0'+minute;
+    } 
+    if(second<10){
+        second='0'+second;
+    } 
+    if(millisecond<10){
+        millisecond='00'+millisecond;
+    }else if(millisecond>10&&millisecond<100){
+        millisecond='0'+millisecond;
+    }
+
+    return year + '/' + month + '/' + date + ' ' + hour + ':' + minute + ':' + second + ':' + millisecond;
+} 
+
+const logFormatter = (options) => {
+    // - Return string will be passed to logger.
+    // - Optionally, use options.colorize(options.level, <string>) to
+    //   colorize output based on the log level.
+    return options.timestamp() + ' ' +
+        winston.config.colorize(options.level, options.level.toUpperCase()) + ' ' +
+        (options.message ? options.message : '') +
+        (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );      
+}
 
 const init = () => {
 
@@ -14,31 +59,46 @@ const init = () => {
         fs.mkdirSync( logDir );
     }
 
-    const logFormat = winston.format.printf(info => {
+    //Set Log Message Format
+    //winston@v2.4.1 does not support it yet
+   /*  const logFormat = winston.format.printf(info => {
         return `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`;
-    });
+    }); */
+    
 
-    logger = winston.createLogger({
+    //Create Logger
+    logger = new (winston.Logger)({
         level: 'info',
-        format:  winston.format.combine(
+        //winston@v2.4.1 does not support it yet
+        /* format:  winston.format.combine(
             winston.format.label({ label: 'GENERAL' }),
             winston.format.timestamp(),
             logFormat
-        ),
+        ), */
         transports: [
-            //
-            // - Write to all logs with level `info` and below to `combined.log` 
-            // - Write all logs error (and below) to `error.log`.
-            //
-            new winston.transports.File({ 
-                filename: logDir + 'error.log', 
-                level: 'error' 
-            }),
-            new winston.transports.File({ 
-                filename: logDir + 'combined.log'
-            }),
             new winston.transports.Console({
-                colorize: true
+                timestamp: () => {return getNowString();},
+                formatter: (options) => {return logFormatter(options)}
+            }),
+            new dailyRotateFile({
+              name: 'combined-file',
+              timestamp: () => {return getNowString();},
+              formatter: (options) => {return logFormatter(options)},
+              filename: logDir + 'combined.log',
+              datePattern: 'yyyy-MM-dd.',
+              prepend: true,
+              level: 'info',
+              zippedArchive: true
+            }),
+            new dailyRotateFile({
+                name: 'error-file',
+                timestamp: () => {return getNowString();},
+                formatter: (options) => {return logFormatter(options)},
+                filename: logDir + 'error.log',
+                datePattern: 'yyyy-MM-dd.',
+                prepend: true,
+                level: 'error',
+                zippedArchive: true
             })
         ]
     });
